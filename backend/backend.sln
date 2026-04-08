@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthDemo.Api", "AuthDemo.Api\AuthDemo.Api.csproj", "{ECC2C98D-3527-5387-1E1A-630025F95AD0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ECC2C98D-3527-5387-1E1A-630025F95AD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECC2C98D-3527-5387-1E1A-630025F95AD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECC2C98D-3527-5387-1E1A-630025F95AD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECC2C98D-3527-5387-1E1A-630025F95AD0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3194F2A7-2CD4-4090-A9F0-8E6C193CE641}
+	EndGlobalSection
+EndGlobal
