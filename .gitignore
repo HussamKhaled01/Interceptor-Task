@@ -1,0 +1,21 @@
+# Node.js / Angular
+node_modules/
+.angular/
+dist/
+.npm/
+
+# .NET / Visual Studio
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.sln.docstates
+
+# Backend specific
+backend/AuthDemo.Api/bin/
+backend/AuthDemo.Api/obj/
+
+# Other
+.DS_Store
+*.log
