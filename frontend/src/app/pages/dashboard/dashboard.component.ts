@@ -36,7 +36,6 @@ export class DashboardComponent implements OnInit {
         this.loading = false;
       },
       error: () => {
-        this.error = 'Failed to load products. Is the API running?';
         this.loading = false;
       }
     });
@@ -48,5 +47,21 @@ export class DashboardComponent implements OnInit {
 
   get email() {
     return this.authService.getEmail();
+  }
+
+  runAdminAction() {
+    this.http.get<{ message: string }>(`${environment.apiUrl}/auth/admin-check`).subscribe({
+      next: (res) => {
+        alert(`✅ SUCCESS: ${res.message}`);
+      }
+    });
+  }
+
+  runForbiddenAction() {
+    this.http.get<{ message: string }>(`${environment.apiUrl}/auth/fail-check`).subscribe({
+      next: (res) => {
+        alert(`❓ UNEXPECTED: ${res.message}`);
+      }
+    });
   }
 }

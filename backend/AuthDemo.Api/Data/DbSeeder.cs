@@ -10,13 +10,22 @@ public static class DbSeeder
         db.Database.EnsureCreated();
 
         var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+        // Create the Admin Role if it doesnt exist
+        const string adminRole = "Admin";
+        if (!await roleManager.RoleExistsAsync(adminRole))
+        {
+            await roleManager.CreateAsync(new IdentityRole(adminRole));
+        }
 
         const string email = "demo@demo.com";
         const string password = "Demo@1234";
 
-        if (await userManager.FindByEmailAsync(email) == null)
+        var user = await userManager.FindByEmailAsync(email);
+        if (user == null)
         {
-            var user = new IdentityUser
+            user = new IdentityUser
             {
                 UserName = email,
                 Email = email,
@@ -24,6 +33,12 @@ public static class DbSeeder
             };
 
             await userManager.CreateAsync(user, password);
+        }
+
+        // Ensure the user has the Admin Role
+        if (!await userManager.IsInRoleAsync(user, adminRole))
+        {
+            await userManager.AddToRoleAsync(user, adminRole);
         }
     }
 }

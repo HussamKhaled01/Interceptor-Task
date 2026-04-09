@@ -1,107 +1,112 @@
-# Interceptor Authentication Walkthrough
+# Interceptor & Authorization Mastery Walkthrough
 
-A demo project showing how JWT authentication works end-to-end using an Angular HTTP Interceptor.
+This demo project shows how JWT authentication works end-to-end using Angular HTTP Interceptors and .NET 8, while demonstrating advanced features like performance monitoring, global loading states, and automated role-based access control.
 
 **Backend:** .NET 8 Web API with ASP.NET Identity + SQL Server  
-**Frontend:** Angular 17 with a functional HTTP interceptor
+**Frontend:** Angular 17+ with modern Functional Interceptors
 
 ---
 
-## The Concept
+## 🚀 Advanced Professional Features
 
-Every API call to a protected endpoint needs an `Authorization` header.  
-Instead of adding it manually in every service, the interceptor handles it **automatically**:
+This project has been enhanced with four professional-grade features to demonstrate "Senior-level" development practices.
+
+### ⏱️ 1. Performance Monitoring (`performanceInterceptor`)
+This interceptor tracks the "Round Trip Time" (RTT) of every HTTP request.
+- **Observability:** Records a timestamp when a request starts and logs the final duration to the browser console using RxJS `finalize`.
+- **Why it's important:** Real-world apps need monitoring to identify slow APIs and improve UX.
+
+### 🔐 2. Automated Authorization Check (RBAC)
+Demonstrates the difference between **Authentication** (who you are) and **Authorization** (what you can do).
+- **Enforcement:** The backend uses `[Authorize(Roles = "Admin")]` to block unauthorized requests with a **403 Forbidden** status code.
+- **Automated Demo:** The Dashboard includes:
+  - **Blue Button ("Admin Action")**: Calls a restricted API that succeeds for your Admin user.
+  - **Red Button ("Forbidden Action")**: Calls a restricted API that is blocked, demonstrating a 403 refusal.
+
+### ⌛ 3. Global Loading Spinner
+An automated UI feature that shows a full-screen blurred overlay during ANY network activity.
+- **Technical Detail:** Uses **Angular Signals** and an interceptor to track the "active request count" globally.
+
+### 🛑 4. Global Error Handling (Toasts)
+Centralizes error detection. Instead of manual code in every component, a global interceptor catches errors (401, 403, 500) and displays a beautiful "Toast" notification.
+
+---
+
+## 📕 The Core Concept
+
+Every API call to a protected endpoint needs an `Authorization` header. Instead of adding it manually in every service, the **`authInterceptor`** handles it automatically:
 
 ```
 Request → [AuthInterceptor] → adds Bearer token → API
 ```
 
-Open `src/app/core/interceptors/auth.interceptor.ts` — that's the key file.
+---
+
+## 🔑 Seeded User
+
+| Email          | Password   | Role      |
+|----------------|------------|-----------|
+| demo@demo.com  | Demo@1234  | **Admin** |
 
 ---
 
-## Seeded User
-
-| Email          | Password   |
-|----------------|------------|
-| demo@demo.com  | Demo@1234  |
-
----
-
-## Setup
-
-### Backend
-
-1. Update the connection string in `appsettings.json` if needed  
-   (default uses LocalDB — works out of the box on Windows with VS)
-
-2. Run the API:
-   ```bash
-   cd backend/AuthDemo.Api
-   dotnet run
-   ```
-   The database and seeded user are created automatically on first run.  
-   API runs on `http://localhost:5000`
-
-### Frontend
-
-```bash
-cd frontend
-npm install
-ng serve
-```
-
-App runs on `http://localhost:4200`
-
----
-
-## Project Structure
+## 📂 Project Structure
 
 ```
 backend/
 └── AuthDemo.Api/
     ├── Controllers/
-    │   ├── AuthController.cs      ← POST /api/auth/login
-    │   └── ProductsController.cs  ← GET  /api/products  [Authorize]
+    │   ├── AuthController.cs      ← POST /login, /admin-check, /fail-check
+    │   └── ProductsController.cs  ← [Authorize] API
     ├── Data/
     │   ├── AppDbContext.cs
-    │   └── DbSeeder.cs            ← seeds demo@demo.com
-    ├── Models/
-    │   ├── LoginRequest.cs
-    │   └── LoginResponse.cs
+    │   └── DbSeeder.cs            ← Seeds the Admin user/role
     └── Services/
-        └── TokenService.cs        ← JWT generation
+        └── TokenService.cs        ← JWT generation with Role claims
 
 frontend/src/app/
 ├── core/
 │   ├── interceptors/
-│   │   └── auth.interceptor.ts   ← attaches the token to every request
-│   ├── guards/
-│   │   └── auth.guard.ts         ← blocks unauthenticated navigation
+│   │   ├── auth.interceptor.ts    ← Attaches JWT tokens
+│   │   ├── performance.interceptor.ts
+│   │   ├── loading.interceptor.ts
+│   │   └── error.interceptor.ts
 │   └── services/
-│       └── auth.service.ts       ← login / logout / token management
-└── pages/
-    ├── login/                    ← public route
-    └── dashboard/                ← protected route (products list)
+│       ├── auth.service.ts
+│       ├── loading.service.ts     ← State for spinner
+│       └── toast.service.ts       ← State for notifications
+└── shared/components/             ← Global Spinner & Toast UI
 ```
 
 ---
 
-## Flow
+## 🛠️ Setup & Execution
 
-1. User submits login form → `POST /api/auth/login`
-2. API validates credentials, returns a JWT
-3. Angular stores the token in `localStorage`
-4. User navigates to `/dashboard` → `authGuard` checks `isLoggedIn()`
-5. `DashboardComponent` calls `GET /api/products`
-6. **`authInterceptor` intercepts the request**, clones it, and adds the `Authorization` header
-7. API validates the JWT, returns the products
+### 💻 Backend
+```bash
+cd backend/AuthDemo.Api
+dotnet run
+```
+*App runs on `http://localhost:5000`. Database is created automatically on first run.*
 
+### 🎨 Frontend
+```bash
+cd frontend
+npm install
+ng serve
+```
+*App runs on `http://localhost:4200`.*
 
-# Backend
-    
-    cd backend/AuthDemo.Api && dotnet run
+---
 
-# Frontend
+## 🏁 How to Verify (The Demo Flow)
 
-    cd frontend && npm install && ng serve
+1. **Start both Backend and Frontend.**
+2. **Login** as `demo@demo.com`. Watch the **Spinner** appear.
+3. **Check Console (F12)** to see the **Performance** timing logs.
+4. **Click "Admin Action (Success)"** to see a successful role check.
+5. **Click "Forbidden Action (Fail)"** to see a **403 Forbidden** toast notification.
+6. **Stop the Backend** and try to refresh to see the **Network Error** toast.
+
+---
+*Developed as a professional demonstration of Full-Stack Interceptor and Security patterns.*

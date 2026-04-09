@@ -4,7 +4,11 @@
       <h1>Dashboard</h1>
       <span class="user-badge">{{ email }}</span>
     </div>
-    <button class="logout-btn" (click)="logout()">Logout</button>
+    <div class="actions">
+      <button class="admin-btn" (click)="runAdminAction()">Admin Action (Success)</button>
+      <button class="admin-btn forbidden" (click)="runForbiddenAction()">Forbidden Action (Fail)</button>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
   </header>
 
   <main>

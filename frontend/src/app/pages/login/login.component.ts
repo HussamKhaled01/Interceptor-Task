@@ -26,7 +26,6 @@ export class LoginComponent {
     this.authService.login(this.email, this.password).subscribe({
       next: () => this.router.navigate(['/dashboard']),
       error: () => {
-        this.error = 'Invalid email or password';
         this.loading = false;
       }
     });

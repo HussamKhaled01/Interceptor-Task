@@ -9,20 +9,29 @@ namespace AuthDemo.Api.Services;
 public class TokenService
 {
     private readonly IConfiguration _config;
+    private readonly UserManager<IdentityUser> _userManager;
 
-    public TokenService(IConfiguration config)
+    public TokenService(IConfiguration config, UserManager<IdentityUser> userManager)
     {
         _config = config;
+        _userManager = userManager;
     }
 
-    public string GenerateToken(IdentityUser user)
+    public async Task<string> GenerateToken(IdentityUser user)
     {
-        var claims = new[]
+        var roles = await _userManager.GetRolesAsync(user);
+        
+        var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim(ClaimTypes.Email, user.Email!),
             new Claim(ClaimTypes.Name, user.UserName!)
         };
+
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
