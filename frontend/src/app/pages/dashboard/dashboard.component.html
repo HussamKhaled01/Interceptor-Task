@@ -19,30 +19,29 @@
     </div>
 
     @if (loading) {
-      <p class="state-msg">Loading products...</p>
+    <p class="state-msg">Loading products...</p>
     } @else if (error) {
-      <p class="state-msg error">{{ error }}</p>
+    <p class="state-msg error">{{ error }}</p>
     } @else {
-      <p class="meta">Fetched by: <strong>{{ requestedBy }}</strong></p>
 
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Product</th>
-            <th>Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (p of products; track p.id) {
-            <tr>
-              <td>{{ p.id }}</td>
-              <td>{{ p.name }}</td>
-              <td>{{ p.price | currency }}</td>
-            </tr>
-          }
-        </tbody>
-      </table>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Product</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of products; track p.id) {
+        <tr>
+          <td>{{ p.id }}</td>
+          <td>{{ p.name }}</td>
+          <td>{{ p.price | currency }}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
     }
   </main>
 </div>

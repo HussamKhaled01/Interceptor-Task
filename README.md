@@ -57,10 +57,14 @@ backend/
 └── AuthDemo.Api/
     ├── Controllers/
     │   ├── AuthController.cs      ← POST /login, /admin-check, /fail-check
-    │   └── ProductsController.cs  ← [Authorize] API
+    │   └── ProductsController.cs  ← Generic Programming Demo
     ├── Data/
     │   ├── AppDbContext.cs
     │   └── DbSeeder.cs            ← Seeds the Admin user/role
+    ├── Models/
+    │   ├── ApiResponse.cs         ← Generic Wrapper
+    │   ├── Product.cs             ← Generic Test Model
+    │   └── LoginRequest.cs
     └── Services/
         └── TokenService.cs        ← JWT generation with Role claims
 
@@ -71,12 +75,40 @@ frontend/src/app/
 │   │   ├── performance.interceptor.ts
 │   │   ├── loading.interceptor.ts
 │   │   └── error.interceptor.ts
+│   ├── models/
+│   │   ├── api-response.model.ts  ← Generic interface
+│   │   └── product.model.ts
 │   └── services/
 │       ├── auth.service.ts
 │       ├── loading.service.ts     ← State for spinner
 │       └── toast.service.ts       ← State for notifications
 └── shared/components/             ← Global Spinner & Toast UI
 ```
+
+---
+
+## 🏗️ Generic Programming Essentials (Task Implementation)
+
+This project includes a **Generic Library** demonstration in both C# and TypeScript to showcase type safety and code reusability.
+
+### 🧩 C# Implementation (Backend)
+Located in `backend/AuthDemo.Api/Models/ApiResponse.cs` and `Controllers/ProductsController.cs`.
+- **Generic Class**: `ApiResponse<T> where T : notnull` - A standardized wrapper for all API responses.
+- **Generic Methods**: `CreateSuccess(T data)` and `CreateError(string message)` - Static helpers for consistent response handling.
+- **Tested with 3 different types to prove the generic works for any data:**
+    1. `ApiResponse<string>` — wraps a simple text message (`/api/products/status`)
+    2. `ApiResponse<int>` — wraps a single number (`/api/products/count`)
+    3. `ApiResponse<Product>` — wraps a full object (`/api/products/not-found/{id}`)
+
+### 🔷 TypeScript Implementation (Frontend)
+Located in `frontend/src/app/core/models/api-response.model.ts`.
+- **Generic Interface**: `ApiResponse<T>` - Ensures the frontend can handle any wrapped data type with full IntelliSense support.
+- **Generic Utility**: `logResponse<T extends { success: boolean; message: string }>(response: T)` - A constrained generic method for logging API results.
+
+### ❓ Why Generics?
+1. **Code Reusability**: Instead of creating `StringResponse`, `IntResponse`, and `ProductResponse`, a single `ApiResponse<T>` handles everything.
+2. **Type Safety**: Generics catch type mismatches at compile-time rather than runtime.
+3. **Clean Architecture**: Standardizes the "contract" between Backend and Frontend.
 
 ---
 
@@ -106,7 +138,7 @@ ng serve
 3. **Check Console (F12)** to see the **Performance** timing logs.
 4. **Click "Admin Action (Success)"** to see a successful role check.
 5. **Click "Forbidden Action (Fail)"** to see a **403 Forbidden** toast notification.
-6. **Stop the Backend** and try to refresh to see the **Network Error** toast.
+6. **Navigate to Swagger** at `http://localhost:5000/swagger` to test the **ProductsController** with 3 different data types.
 
 ---
-*Developed as a professional demonstration of Full-Stack Interceptor and Security patterns.*
+*Developed as a professional demonstration of Full-Stack Interceptor, Security patterns, and Generic Programming Essentials.*

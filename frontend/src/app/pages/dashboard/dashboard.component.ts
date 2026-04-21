@@ -2,12 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
+import { ApiResponse } from '../../core/models/api-response.model';
+import { Product } from '../../core/models/product.model';
 import { environment } from '../../../environments/environment';
-
-interface ProductsResponse {
-  requestedBy: string;
-  products: { id: number; name: string; price: number }[];
-}
 
 @Component({
   selector: 'app-dashboard',
@@ -17,8 +14,7 @@ interface ProductsResponse {
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit {
-  products: { id: number; name: string; price: number }[] = [];
-  requestedBy = '';
+  products: Product[] = [];
   loading = true;
   error = '';
 
@@ -29,13 +25,17 @@ export class DashboardComponent implements OnInit {
   }
 
   loadProducts() {
-    this.http.get<ProductsResponse>(`${environment.apiUrl}/products`).subscribe({
+    this.http.get<ApiResponse<Product[]>>(`${environment.apiUrl}/products`).subscribe({
       next: (res) => {
-        this.products = res.products;
-        this.requestedBy = res.requestedBy;
+        if (res.success) {
+          this.products = res.data;
+        } else {
+          this.error = res.message;
+        }
         this.loading = false;
       },
       error: () => {
+        this.error = 'Failed to load products';
         this.loading = false;
       }
     });
